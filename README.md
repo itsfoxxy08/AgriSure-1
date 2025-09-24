@@ -6,9 +6,9 @@ A comprehensive platform designed to eliminate corruption and increase transpare
 
 ## Team Members
 
-- **Sudeep Kushwaha** - Full Stack Developer
-- **Abhishek** - Frontend Developer  
-- **Vikas Choudhary** - UI/UX Designer & Developer
+- **Sudeep Kushwaha** - BackEnd Developer 
+- **Abhishek** - Data Management  & Research
+- **Vikas Choudhary** - FrontEnd Developer & UI/UX Designer 
 
 ## Project Overview
 
@@ -52,6 +52,7 @@ AgriSure is a revolutionary platform that bridges the gap between farmers and go
 - **State Management**: TanStack Query
 - **Charts**: Recharts
 - **Form Handling**: React Hook Form + Zod validation
+- **Database**: MongoDB
 
 ## Getting Started
 
