@@ -95,7 +95,7 @@ export async function createMandiPrice(priceData: Omit<MandiPrice, '_id' | 'crea
   return { ...price, _id: result.insertedId.toString() };
 }
 
-// Initialize default data
+// Initialize default data with real government schemes
 export async function initializeDefaultData() {
   const { db } = await connectToDatabase();
   
@@ -103,15 +103,20 @@ export async function initializeDefaultData() {
   const existingSchemes = await db.collection('schemes').countDocuments();
   
   if (existingSchemes === 0) {
-    const defaultSchemes: Omit<Scheme, '_id'>[] = [
+    const realGovernmentSchemes: Omit<Scheme, '_id'>[] = [
       {
         schemeId: 'pm-kisan-2024',
-        title: 'PM-KISAN Samman Nidhi Yojana',
-        description: 'Direct income support of ₹6,000 per year to small and marginal farmers',
+        title: 'PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)',
+        description: 'Direct income support of ₹6,000 per year to small and marginal farmer families having combined land holding/ownership of up to 2 hectares',
         category: 'CENTRAL',
-        benefitAmount: '₹6,000 annually',
-        eligibility: ['Small and marginal farmers', 'Land holding up to 2 hectares'],
-        documents: ['Aadhaar Card', 'Land Records', 'Bank Account Details'],
+        benefitAmount: '₹6,000 annually (₹2,000 per installment)',
+        eligibility: [
+          'Small and marginal farmers with landholding up to 2 hectares',
+          'Valid Aadhaar card linked to bank account',
+          'Land ownership documents',
+          'Active bank account'
+        ],
+        documents: ['Aadhaar Card', 'Land Records/Khatauni', 'Bank Account Details', 'Passport Size Photo'],
         applicationUrl: 'https://pmkisan.gov.in/',
         isActive: true,
         createdAt: new Date(),
@@ -119,20 +124,127 @@ export async function initializeDefaultData() {
       },
       {
         schemeId: 'pmfby-2024',
-        title: 'Pradhan Mantri Fasal Bima Yojana',
-        description: 'Comprehensive crop insurance scheme',
+        title: 'PMFBY (Pradhan Mantri Fasal Bima Yojana)',
+        description: 'Comprehensive crop insurance scheme providing financial support to farmers suffering crop loss/damage arising out of unforeseen events',
         category: 'CENTRAL',
-        benefitAmount: 'Up to ₹2,00,000 per hectare',
-        eligibility: ['All farmers', 'Notified crops only'],
-        documents: ['Aadhaar Card', 'Land Records', 'Sowing Certificate'],
+        benefitAmount: 'Sum Insured: ₹2,00,000 per hectare (varies by crop)',
+        eligibility: [
+          'All farmers (sharecroppers, tenant farmers included)',
+          'Farmers growing notified crops in notified areas',
+          'Compulsory for loanee farmers, voluntary for non-loanee farmers'
+        ],
+        documents: ['Aadhaar Card', 'Land Records', 'Sowing Certificate', 'Bank Account Details', 'Loan Sanction Letter (if applicable)'],
         applicationUrl: 'https://pmfby.gov.in/',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        schemeId: 'soil-health-card-2024',
+        title: 'Soil Health Card Scheme',
+        description: 'Provides soil health cards to farmers which carry crop-wise recommendations of nutrients and fertilizers required for individual farms',
+        category: 'CENTRAL',
+        benefitAmount: 'Free soil testing + ₹1,500 incentive per card',
+        eligibility: [
+          'All farmers owning agricultural land',
+          'Minimum 0.5 hectare land holding',
+          'Valid land ownership documents'
+        ],
+        documents: ['Land Records', 'Aadhaar Card', 'Bank Account Details', 'Soil Sample'],
+        applicationUrl: 'https://soilhealth.dac.gov.in/',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        schemeId: 'kcc-2024',
+        title: 'KCC (Kisan Credit Card)',
+        description: 'Flexible and hassle-free credit facility for farmers to meet their production credit requirements in a timely manner',
+        category: 'CENTRAL',
+        benefitAmount: 'Credit limit up to ₹3,00,000 (4% interest rate)',
+        eligibility: [
+          'All farmers - individual/joint borrowers who are owner cultivators',
+          'Tenant farmers, oral lessees & sharecroppers',
+          'Self Help Group members or Joint Liability Group members'
+        ],
+        documents: ['Land Records', 'Aadhaar Card', 'PAN Card', 'Bank Statements', 'Income Certificate'],
+        applicationUrl: 'https://www.nabard.org/content1.aspx?id=570&catid=23',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        schemeId: 'pm-kusum-2024',
+        title: 'PM-KUSUM (Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan)',
+        description: 'Aims to provide financial and water security to farmers through harnessing solar energy capabilities',
+        category: 'CENTRAL',
+        benefitAmount: '60% subsidy on solar pumps and power plants',
+        eligibility: [
+          'Individual farmers',
+          'Farmer Producer Organizations (FPOs)',
+          'Cooperatives',
+          'Water User Associations'
+        ],
+        documents: ['Land Records', 'Electricity Connection Proof', 'Bank Account Details', 'Project Report', 'NOC from Electricity Board'],
+        applicationUrl: 'https://pmkusum.mnre.gov.in/',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        schemeId: 'pmksy-2024',
+        title: 'PMKSY (Pradhan Mantri Krishi Sinchayee Yojana)',
+        description: 'Dedicated irrigation scheme to expand cultivated area with assured irrigation, improve water use efficiency and introduce sustainable water conservation practices',
+        category: 'CENTRAL',
+        benefitAmount: '75% subsidy on micro-irrigation systems',
+        eligibility: [
+          'All categories of farmers',
+          'Self Help Groups, Cooperatives, FPOs',
+          'Minimum 0.5 hectare land for individual farmers'
+        ],
+        documents: ['Land Records', 'Aadhaar Card', 'Bank Account Details', 'Water Source Certificate', 'Soil Test Report'],
+        applicationUrl: 'https://pmksy.gov.in/',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        schemeId: 'formation-fpo-2024',
+        title: 'Formation and Promotion of FPOs',
+        description: 'Central Sector Scheme for formation and promotion of 10,000 Farmer Producer Organizations (FPOs)',
+        category: 'CENTRAL',
+        benefitAmount: '₹18.00 lakh per FPO over 3 years',
+        eligibility: [
+          'Minimum 300 farmers in plains, 100 in hills/tribal areas',
+          'Registered as Producer Company under Companies Act',
+          'Engaged in agriculture and allied activities'
+        ],
+        documents: ['Registration Certificate', 'Member List', 'Business Plan', 'Bank Account Details', 'Audited Financial Statements'],
+        applicationUrl: 'https://sfac.in/fpo/',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        schemeId: 'national-beekeeping-2024',
+        title: 'National Beekeeping & Honey Mission (NBHM)',
+        description: 'Promotes scientific beekeeping in the country to achieve the goal of Sweet Revolution',
+        category: 'CENTRAL',
+        benefitAmount: '40-80% subsidy on beekeeping equipment',
+        eligibility: [
+          'Individual farmers, Self Help Groups',
+          'Cooperatives, FPOs',
+          'Entrepreneurs in beekeeping'
+        ],
+        documents: ['Aadhaar Card', 'Bank Account Details', 'Training Certificate', 'Land/Space Availability Certificate'],
+        applicationUrl: 'https://nbhm.gov.in/',
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date()
       }
     ];
     
-    await db.collection('schemes').insertMany(defaultSchemes);
-    console.log('Default schemes initialized');
+    await db.collection('schemes').insertMany(realGovernmentSchemes);
+    console.log('✅ Real government schemes initialized in database');
   }
 }
