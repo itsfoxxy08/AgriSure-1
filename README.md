@@ -49,7 +49,7 @@
 ### 💡 Our Solution Impact
 - **Direct farmer-government connection** eliminating middlemen
 - **Real-time transparency** in all transactions
-- **AI-powered recommendations** for maximum benefit utilization
+- **AI-powered recommendations** for maximum benefit utilization.
 - **Secure corruption reporting** with legal protection
 
 ## ✨ Revolutionary Features
